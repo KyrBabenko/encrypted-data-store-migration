@@ -14,7 +14,7 @@ import kotlinx.coroutines.runBlocking
 class DataStorePreferences(
     context: Context,
     private val scope: CoroutineScope
-) : Preferences {
+) : PreferencesProvider {
 
     companion object {
         private const val PREFERENCES_DATA_STORE_NAME = "preferences_data_store_name"

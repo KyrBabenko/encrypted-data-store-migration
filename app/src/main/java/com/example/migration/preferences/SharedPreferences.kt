@@ -6,7 +6,7 @@ import androidx.security.crypto.MasterKey
 
 class SharedPreferences(
     private val context: Context
-): Preferences {
+): PreferencesProvider {
 
     companion object {
         private const val FILE_NAME = "secure_prefs"
