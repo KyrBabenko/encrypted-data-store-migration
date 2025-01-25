@@ -4,12 +4,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.migration.databinding.ActivityMainBinding
 import com.example.migration.di.AppComponent
-import com.example.migration.preferences.Preferences
+import com.example.migration.preferences.PreferencesProvider
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    lateinit var preferences: Preferences
+    lateinit var preferences: PreferencesProvider
 
     companion object {
         private const val TITLE_KEY = "key"
