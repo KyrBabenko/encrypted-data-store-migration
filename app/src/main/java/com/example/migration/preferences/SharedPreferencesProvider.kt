@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
-class SharedPreferences(
+class SharedPreferencesProvider(
     private val context: Context
 ): PreferencesProvider {
 
