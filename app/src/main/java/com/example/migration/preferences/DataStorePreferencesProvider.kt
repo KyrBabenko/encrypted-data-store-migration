@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class DataStorePreferences(
+class DataStorePreferencesProvider(
     context: Context,
     private val scope: CoroutineScope
 ) : PreferencesProvider {
