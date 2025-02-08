@@ -6,14 +6,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class DataStorePreferences(
     context: Context,
-    private val scope: CoroutineScope
 ) : PreferencesProvider {
 
     companion object {
@@ -32,11 +29,9 @@ class DataStorePreferences(
         }
     }
 
-    override fun putString(key: String, value: String) {
-        scope.launch {
-            dataStore.edit { preferences ->
-                preferences[stringPreferencesKey(key)] = value
-            }
+    override fun putString(key: String, value: String): Unit = runBlocking {
+        dataStore.edit { preferences ->
+            preferences[stringPreferencesKey(key)] = value
         }
     }
 }
