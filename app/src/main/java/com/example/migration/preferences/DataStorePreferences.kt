@@ -2,7 +2,7 @@ package com.example.migration.preferences
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences as DataStorePreferences
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -20,7 +20,7 @@ class DataStorePreferences(
         private const val PREFERENCES_DATA_STORE_NAME = "preferences_data_store_name"
     }
 
-    private val Context.dataStore: DataStore<DataStorePreferences> by preferencesDataStore(name = PREFERENCES_DATA_STORE_NAME)
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_DATA_STORE_NAME)
     private val dataStore = context.dataStore
 
     override fun getString(key: String, defaultValue: String?): String? = runBlocking {
