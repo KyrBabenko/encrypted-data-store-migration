@@ -16,7 +16,7 @@ class AppComponent {
         private const val FILE_NAME = "secure_prefs"
     }
 
-    private lateinit var shredPreferences: SharedPreferences
+    private lateinit var sharedPreferences: SharedPreferences
 
     fun inject(mainActivity: MainActivity) {
         initSharedPreferences(mainActivity)
@@ -24,7 +24,8 @@ class AppComponent {
             mainActivity,
             provideMigrations()
         )
-        mainActivity.preferences = preferencesProvider
+        val sharedPreferencesProvider = SharedPreferencesProvider(sharedPreferences)
+        mainActivity.preferences = sharedPreferencesProvider
     }
 
     private fun initSharedPreferences(context: Context) {
@@ -35,13 +36,13 @@ class AppComponent {
 
             EncryptedSharedPreferences.create(
                 context,
-                FILE_NAME,
+                "secure_prefs",
                 masterKey,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             )
         }
-        shredPreferences = sharedPreferences
+        this.sharedPreferences = sharedPreferences
     }
 
     private fun provideMigrations(): List<DataMigration<Preferences>> {
@@ -49,6 +50,6 @@ class AppComponent {
     }
     
     private fun provideMigration(): DataMigration<Preferences> {
-        return SharedPreferencesToDataStoreMigration(shredPreferences)
+        return SharedPreferencesToDataStoreMigration(sharedPreferences)
     }
 }
