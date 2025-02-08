@@ -8,11 +8,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.example.migration.MainActivity
 import com.example.migration.preferences.DataStorePreferencesProvider
-import com.example.migration.preferences.SharedPreferencesProvider
 import com.example.migration.preferences.SharedPreferencesToDataStoreMigration
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 
 class AppComponent {
 
@@ -24,10 +20,8 @@ class AppComponent {
 
     fun inject(mainActivity: MainActivity) {
         initSharedPreferences(mainActivity)
-        val scope = provideScope()
         val preferencesProvider = DataStorePreferencesProvider(
             mainActivity,
-            scope,
             provideMigrations()
         )
         mainActivity.preferences = preferencesProvider
@@ -56,9 +50,5 @@ class AppComponent {
     
     private fun provideMigration(): DataMigration<Preferences> {
         return SharedPreferencesToDataStoreMigration(shredPreferences)
-    }
-    
-    private fun provideScope(): CoroutineScope {
-        return CoroutineScope(Dispatchers.IO + SupervisorJob())
     }
 }

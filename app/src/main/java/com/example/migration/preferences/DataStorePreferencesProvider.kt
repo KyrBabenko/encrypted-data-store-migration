@@ -4,18 +4,14 @@ import android.content.Context
 import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.Preferences as DataStorePreferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class DataStorePreferencesProvider(
     context: Context,
-    private val scope: CoroutineScope,
     private val migrations: List<DataMigration<Preferences>>
 ) : PreferencesProvider {
 
@@ -23,7 +19,7 @@ class DataStorePreferencesProvider(
         private const val PREFERENCES_DATA_STORE_NAME = "preferences_data_store_name"
     }
 
-    private val Context.dataStore: DataStore<DataStorePreferences> by preferencesDataStore(
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
         name = PREFERENCES_DATA_STORE_NAME,
         produceMigrations = { migrations }
     )
@@ -38,11 +34,9 @@ class DataStorePreferencesProvider(
         }
     }
 
-    override fun putString(key: String, value: String) {
-        scope.launch {
-            dataStore.edit { preferences ->
-                preferences[stringPreferencesKey(key)] = value
-            }
+    override fun putString(key: String, value: String): Unit = runBlocking {
+        dataStore.edit { preferences ->
+            preferences[stringPreferencesKey(key)] = value
         }
     }
 }
