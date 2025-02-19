@@ -56,4 +56,18 @@ class DataStorePreferencesProvider(
             e.printStackTrace()
         }
     }
+
+    override fun getAll(): Map<String, String> = runBlocking {
+        return@runBlocking try {
+            val preferences = dataStore.data.first().asMap()
+            preferences.mapNotNull { (key, value) ->
+                val decryptedKey = encryption.decryptKey(key.name)
+                val decryptedValue = value as? String ?: return@mapNotNull null
+                decryptedKey to encryption.decryptValue(decryptedValue)
+            }.toMap()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyMap()
+        }
+    }
 }

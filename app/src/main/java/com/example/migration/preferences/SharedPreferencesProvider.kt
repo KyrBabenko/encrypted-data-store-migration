@@ -13,4 +13,10 @@ class SharedPreferencesProvider(
     override fun putString(key: String, value: String) {
         sharedPreferences.edit().putString(key, value).apply()
     }
+
+    override fun getAll(): Map<String, String> {
+        return sharedPreferences.all.mapNotNull { (key, value) ->
+            if (value is String) key to value else null
+        }.toMap()
+    }
 }
