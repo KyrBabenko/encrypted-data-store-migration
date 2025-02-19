@@ -26,26 +26,34 @@ class DataStorePreferencesProvider(
     )
     private val dataStore = context.dataStore
 
-    private val encryption = EncryptedDataStore()
+    private val encryption = EncryptedDataStore(context)
 
     override fun getString(key: String, defaultValue: String?): String? = runBlocking {
         return@runBlocking try {
-            val encryptedKey = encryption.encryptKey(key).toString(Charsets.UTF_8)
+            val encryptedKey = encryption.encryptKey(key)
             val preferencesKey = stringPreferencesKey(encryptedKey)
             val encryptedValue = dataStore.data.first()[preferencesKey]
-            encryptedValue?.let { encryption.decryptValue(it.toByteArray()) } ?: defaultValue
+
+            encryptedValue?.let {
+                encryption.decryptValue(it)
+            } ?: defaultValue
         } catch (e: Exception) {
+            e.printStackTrace()
             defaultValue
         }
     }
 
     override fun putString(key: String, value: String): Unit = runBlocking {
-        val encryptedKey = encryption.encryptKey(key).toString(Charsets.UTF_8)
-        val preferencesKey = stringPreferencesKey(encryptedKey)
-        val encryptedValue = encryption.encryptValue(value).toString(Charsets.UTF_8)
+        try {
+            val encryptedKey = encryption.encryptKey(key)
+            val preferencesKey = stringPreferencesKey(encryptedKey)
+            val encryptedValue = encryption.encryptValue(value)
 
-        dataStore.edit { preferences ->
-            preferences[preferencesKey] = encryptedValue
+            dataStore.edit { preferences ->
+                preferences[preferencesKey] = encryptedValue
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

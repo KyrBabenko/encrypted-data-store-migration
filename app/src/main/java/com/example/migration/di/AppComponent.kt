@@ -21,9 +21,9 @@ class AppComponent {
 
     fun inject(mainActivity: MainActivity) {
         initSharedPreferences(mainActivity)
-        val preferencesProvider = DataStorePreferencesProvider(
+        val dataStorePreferencesProvider = DataStorePreferencesProvider(
             mainActivity,
-            provideMigrations()
+            provideMigrations(mainActivity)
         )
         val sharedPreferencesProvider = SharedPreferencesProvider(sharedPreferences)
         mainActivity.preferences = sharedPreferencesProvider
@@ -46,11 +46,11 @@ class AppComponent {
         this.sharedPreferences = sharedPreferences
     }
 
-    private fun provideMigrations(): List<DataMigration<Preferences>> {
-        return listOf(provideMigration())
+    private fun provideMigrations(mainActivity: MainActivity): List<DataMigration<Preferences>> {
+        return listOf(provideMigration(mainActivity))
     }
     
-    private fun provideMigration(): DataMigration<Preferences> {
-        return SharedPreferencesToDataStoreMigration(sharedPreferences)
+    private fun provideMigration(mainActivity: MainActivity): DataMigration<Preferences> {
+        return SharedPreferencesToDataStoreMigration(mainActivity, sharedPreferences)
     }
 }

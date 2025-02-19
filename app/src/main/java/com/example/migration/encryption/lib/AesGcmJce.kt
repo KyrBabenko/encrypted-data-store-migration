@@ -3,7 +3,7 @@ package com.example.migration.encryption.lib
 import java.security.GeneralSecurityException
 import java.security.SecureRandom
 
-class AesGcmJce(private val key: ByteArray) {
+class AesGcmJce(key: ByteArray) {
     private val insecureNonceAesGcmJce = InsecureNonceAesGcmJce(key)
 
     @Throws(GeneralSecurityException::class)
