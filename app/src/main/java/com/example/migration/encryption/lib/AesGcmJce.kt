@@ -3,7 +3,7 @@ package com.example.migration.encryption.lib
 import java.security.GeneralSecurityException
 import java.security.SecureRandom
 
-class AesGcmJce(key: ByteArray) {
+class AesGcmJce(private val key: ByteArray) {
     private val insecureNonceAesGcmJce = InsecureNonceAesGcmJce(key)
 
     @Throws(GeneralSecurityException::class)
@@ -11,12 +11,12 @@ class AesGcmJce(key: ByteArray) {
         val secureRandom = SecureRandom()
         val rand = ByteArray(InsecureNonceAesGcmJce.IV_SIZE_IN_BYTES)
         secureRandom.nextBytes(rand)
-        return insecureNonceAesGcmJce.encrypt(rand, plaintext)
+        return insecureNonceAesGcmJce.encrypt(rand, plaintext, associatedData)
     }
 
     @Throws(GeneralSecurityException::class)
     fun decrypt(ciphertext: ByteArray, associatedData: ByteArray): ByteArray {
         val iv = ciphertext.copyOf(InsecureNonceAesGcmJce.IV_SIZE_IN_BYTES)
-        return insecureNonceAesGcmJce.decrypt(iv, ciphertext)
+        return insecureNonceAesGcmJce.decrypt(iv, ciphertext, associatedData)
     }
 }

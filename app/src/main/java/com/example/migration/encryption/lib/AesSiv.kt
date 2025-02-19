@@ -41,10 +41,8 @@ class AesSiv(key: ByteArray) {
     fun encrypt(plaintext: ByteArray, associatedData: ByteArray): ByteArray {
         val computedIv = s2v(associatedData, plaintext)
         val ivForJavaCrypto = computedIv.clone()
-        ivForJavaCrypto[8] =
-            (ivForJavaCrypto[8].toInt() and 0x7F).toByte() // 63th bit from the right
-        ivForJavaCrypto[12] =
-            (ivForJavaCrypto[12].toInt() and 0x7F).toByte() // 31st bit from the right
+        ivForJavaCrypto[8] = (ivForJavaCrypto[8].toInt() and 0x7F).toByte()
+        ivForJavaCrypto[12] = (ivForJavaCrypto[12].toInt() and 0x7F).toByte()
 
         cipher.init(
             Cipher.ENCRYPT_MODE,
@@ -62,10 +60,8 @@ class AesSiv(key: ByteArray) {
         val expectedIv = Arrays.copyOfRange(ciphertext, 0, AesUtil.BLOCK_SIZE)
 
         val ivForJavaCrypto = expectedIv.clone()
-        ivForJavaCrypto[8] =
-            (ivForJavaCrypto[8].toInt() and 0x7F).toByte() // 63th bit from the right
-        ivForJavaCrypto[12] =
-            (ivForJavaCrypto[12].toInt() and 0x7F).toByte() // 31st bit from the right
+        ivForJavaCrypto[8] = (ivForJavaCrypto[8].toInt() and 0x7F).toByte()
+        ivForJavaCrypto[12] = (ivForJavaCrypto[12].toInt() and 0x7F).toByte()
 
         aesCtr.init(
             Cipher.DECRYPT_MODE,
@@ -87,17 +83,12 @@ class AesSiv(key: ByteArray) {
     @Throws(GeneralSecurityException::class)
     private fun s2v(vararg s: ByteArray?): ByteArray {
         if (s.isEmpty()) {
-            // Should never happen with AES-SIV, but we include this for completeness.
             return cmacForS2V.compute(BLOCK_ONE, AesUtil.BLOCK_SIZE)
         }
 
         var result = cmacForS2V.compute(BLOCK_ZERO, AesUtil.BLOCK_SIZE)
         for (i in 0 until s.size - 1) {
-            val currBlock = if (s[i] == null) {
-                ByteArray(0)
-            } else {
-                s[i]
-            }
+            val currBlock = s[i] ?: ByteArray(0)
             result =
                 Bytes.xor(AesUtil.dbl(result), cmacForS2V.compute(currBlock, AesUtil.BLOCK_SIZE))
         }
