@@ -17,7 +17,6 @@ import javax.crypto.spec.SecretKeySpec
 class AesSiv(key: ByteArray) {
 
     companion object {
-        private val KEY_SIZES: Collection<Int> = mutableListOf(64)
         private val BLOCK_ZERO: ByteArray = ByteArray(AesUtil.BLOCK_SIZE)
         private val BLOCK_ONE: ByteArray = byteArrayOf(
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x01.toByte()
