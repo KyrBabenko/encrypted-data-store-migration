@@ -48,5 +48,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.security.crypto)
     implementation(libs.datastore.preferences)
-    compileOnly(libs.tink.android)
+    debugImplementation(libs.tink)
 }

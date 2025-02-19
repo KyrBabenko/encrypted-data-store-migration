@@ -8,6 +8,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.example.migration.MainActivity
 import com.example.migration.preferences.DataStorePreferencesProvider
+import com.example.migration.preferences.SharedPreferencesProvider
 import com.example.migration.preferences.SharedPreferencesToDataStoreMigration
 
 class AppComponent {
@@ -36,7 +37,7 @@ class AppComponent {
 
             EncryptedSharedPreferences.create(
                 context,
-                "secure_prefs",
+                FILE_NAME,
                 masterKey,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM

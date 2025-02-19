@@ -24,7 +24,7 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "androidx-security" }
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
-tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tink" }
+tink = { group = "com.google.crypto.tink", name = "tink-android", version.ref = "tink" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
