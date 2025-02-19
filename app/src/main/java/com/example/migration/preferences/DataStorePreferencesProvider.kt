@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.migration.encryption.EncryptedDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -25,18 +26,26 @@ class DataStorePreferencesProvider(
     )
     private val dataStore = context.dataStore
 
+    private val encryption = EncryptedDataStore()
+
     override fun getString(key: String, defaultValue: String?): String? = runBlocking {
         return@runBlocking try {
-            val preferencesKey = stringPreferencesKey(key)
-            dataStore.data.first()[preferencesKey]
+            val encryptedKey = encryption.encryptKey(key).toString(Charsets.UTF_8)
+            val preferencesKey = stringPreferencesKey(encryptedKey)
+            val encryptedValue = dataStore.data.first()[preferencesKey]
+            encryptedValue?.let { encryption.decryptValue(it.toByteArray()) } ?: defaultValue
         } catch (e: Exception) {
             defaultValue
         }
     }
 
     override fun putString(key: String, value: String): Unit = runBlocking {
+        val encryptedKey = encryption.encryptKey(key).toString(Charsets.UTF_8)
+        val preferencesKey = stringPreferencesKey(encryptedKey)
+        val encryptedValue = encryption.encryptValue(value).toString(Charsets.UTF_8)
+
         dataStore.edit { preferences ->
-            preferences[stringPreferencesKey(key)] = value
+            preferences[preferencesKey] = encryptedValue
         }
     }
 }

@@ -4,10 +4,13 @@ import android.content.SharedPreferences
 import androidx.datastore.core.DataMigration
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.migration.encryption.EncryptedDataStore
 
 class SharedPreferencesToDataStoreMigration(
     private val migrateFrom: SharedPreferences
-): DataMigration<Preferences> {
+) : DataMigration<Preferences> {
+
+    private val encryption = EncryptedDataStore()
 
     override suspend fun cleanUp() {
         // No cleanup needed
@@ -17,7 +20,11 @@ class SharedPreferencesToDataStoreMigration(
         val preferences = currentData.toMutablePreferences()
         migrateFrom.all.forEach { (key, value) ->
             when (value) {
-                is String -> preferences[stringPreferencesKey(key)] = value
+                is String -> {
+                    val encryptedKey = encryption.encryptKey(key).toString(Charsets.UTF_8)
+                    val encryptedValue = encryption.encryptValue(value).toString(Charsets.UTF_8)
+                    preferences[stringPreferencesKey(encryptedKey)] = encryptedValue
+                }
                 else -> throw IllegalArgumentException("Unsupported value type")
             }
         }
