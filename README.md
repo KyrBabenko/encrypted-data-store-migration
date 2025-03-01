@@ -93,7 +93,7 @@ The final version ensures secure data storage by implementing:
 - **Coroutines & Flow**
 
 ## 📖 Read the Article
-A detailed migration guide is available in the [Medium article](https://medium.com/@kyr.babenko/migrating-from-encrypted-sharedpreferences-to-jetpack-datastore-d4bb20f609a6), [Linkedin article]([https://medium.com/@kyr.babenko/migrating-from-encrypted-sharedpreferences-to-jetpack-datastore-d4bb20f609a6](https://www.linkedin.com/pulse/how-androids-encryptedsharedpreferences-work-under-hood-babenko-cwf9f)).
+A detailed migration guide is available in the [Medium article](https://medium.com/@kyr.babenko/migrating-from-encrypted-sharedpreferences-to-jetpack-datastore-d4bb20f609a6), [Linkedin article](https://www.linkedin.com/pulse/how-androids-encryptedsharedpreferences-work-under-hood-babenko-cwf9f).
 
 ## 📝 License
 This project is released under an **open-source license** with no restrictions.
